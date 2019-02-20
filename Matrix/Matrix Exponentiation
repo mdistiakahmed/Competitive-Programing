@@ -3,6 +3,7 @@
 using namespace std;
 
 #define ll long long
+#define si(n) scanf("%d",&n)
 
 const int SIZE=105;
 const int mod=(int)1e9+7;
