@@ -1,4 +1,5 @@
-
+//AP[i]=1 if ith vertex is articular point, vector "bridge" contains all bridges in sorted order
+// tutorial link : https://www.hackerearth.com/practice/algorithms/graphs/articulation-points-and-bridges/tutorial/
 #include<bits/stdc++.h>
 using namespace std;
 
