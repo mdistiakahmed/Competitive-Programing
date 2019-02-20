@@ -1,5 +1,6 @@
 //AP[i]=1 if ith vertex is articular point, vector "bridge" contains all bridges in sorted order
 // tutorial link : https://www.hackerearth.com/practice/algorithms/graphs/articulation-points-and-bridges/tutorial/
+
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -15,6 +16,7 @@ vector<pair<int,int> >bridges;
 void go(int now,int from,int cnt)
 {
     disc[now]=low[now]=cnt;
+    int child=0;
     for(int i=0;i<gr[now].size();i++){
         int to=gr[now][i];
         if(disc[to]){
@@ -22,6 +24,7 @@ void go(int now,int from,int cnt)
             continue;
         }
         go(to,now,cnt+1);
+        child++;
         low[now]=min(low[now],low[to]);
         if(low[to]>=disc[now]){
             AP[now]=1;
@@ -31,7 +34,7 @@ void go(int now,int from,int cnt)
         }
     }
     if(from==-1){
-        if(gr[now].size()>1)AP[now]=1;
+        if(child>1)AP[now]=1;
         else AP[now]=0;
     }
 }
@@ -39,32 +42,33 @@ void go(int now,int from,int cnt)
 int main()
 {
     //freopen("input.txt","r",stdin);
-    int i,j;
-    si(n);si(m);
-    for(i=1;i<=m;i++){
-        int u,v;
-        si(u);si(v);
-        u++;v++;
-        gr[u].push_back(v);
-        gr[v].push_back(u);
+    int i,j,t;
+    si(t);
+    for(int cs=1;cs<=t;cs++){
+        for(i=1;i<MAX;i++)gr[i].clear();
+        memset(disc,0,sizeof(disc));
+        memset(AP,0,sizeof(AP));
+        bridges.clear();
+
+        si(n);si(m);
+        for(i=1;i<=m;i++){
+            int u,v;
+            si(u);si(v);
+            gr[u].push_back(v);
+            gr[v].push_back(u);
+        }
+
+        for(i=1;i<=n;i++){
+            if(disc[i])continue;
+            go(i,-1,1);
+        }
+        int tot_AP=0;
+        for(i=1;i<=n;i++){
+            tot_AP+=AP[i];
+        }
+        printf("Case %d: ",cs);
+        printf("%d\n",tot_AP);
     }
 
-    for(i=1;i<=n;i++){
-        if(disc[i])continue;
-        go(i,-1,1);
-    }
-    int tot_AP=0;
-    for(i=1;i<=n;i++)tot_AP+=AP[i];
-    printf("%d\n",tot_AP);
-    for(i=1;i<=n;i++){
-        if(AP[i])printf("%d",i-1);
-        tot_AP--;
-        if(tot_AP)printf(" ");
-    }
-    printf("\n");
-    printf("%d\n",bridges.size());
-    sort(bridges.begin(),bridges.end());
-    for(int i=0;i<bridges.size();i++){
-        printf("%d %d\n",bridges[i].first-1,bridges[i].second-1);
-    }
 }
+
