@@ -15,14 +15,14 @@ using namespace std;
 int Count[MAX], output[MAX];
 struct suffixArray {
    #define MAX_lg 17
-   #define minchar '$'
+   #define minchar 'a'                              //careful here
    #define Index(a) (((a) < len) ? index[mlgn][a] : -1)
    int pos[MAX], index[MAX_lg][MAX], lcp[MAX], len, mlgn;
 
    suffixArray() {}
    suffixArray(const char *S) { create(S); }
    void CountSort(int add) {
-      int to = max(len, 200);//careful here
+      int to = max(len, 26);                        //careful here
       memset(Count, 0, sizeof(Count));
       for(int i = 0; i < len; i++) ++Count[ Index(pos[i] + add) + 1 ];
       for(int i = 1; i <= to; i++) Count[i] += Count[i-1];
