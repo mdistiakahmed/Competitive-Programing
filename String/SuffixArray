@@ -2,7 +2,7 @@
 using namespace std;
 
 #define si(n) scanf("%d",&n)
-#define MAX 100005
+#define MAX 100005  //=================> careful here
 
 // *************Manual by isti **********
 // this is a O(nlogn) implementation by tonmoy : https://github.com/tanmoymollik/algos/blob/master/suffix_array.cpp
@@ -14,8 +14,8 @@ using namespace std;
 
 int Count[MAX], output[MAX];
 struct suffixArray {
-   #define MAX_lg 17
-   #define minchar 'a'                              //careful here
+   #define MAX_lg 18 //=============> careful here
+   #define minchar 'a' //=================> careful here
    #define Index(a) (((a) < len) ? index[mlgn][a] : -1)
    int pos[MAX], index[MAX_lg][MAX], lcp[MAX], len, mlgn;
 
