@@ -29,7 +29,7 @@ struct suffixArray {
       for(int i = len-1; i >= 0; i--) output[ --Count[ Index(pos[i] + add) + 1 ] ] = pos[i];
       for(int i = 0; i < len; i++) pos[i] = output[i];
    }
-   int Lcp(int x, int y) {
+   int Lcp(int x, int y) { //=============> starting position of two arbitrary suffix
       int ret = 0;
       for(int i = mlgn; i >= 0 && x < len && y < len; i--) if(index[i][x] == index[i][y])
          x += (1 << i),
