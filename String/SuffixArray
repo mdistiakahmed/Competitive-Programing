@@ -2,6 +2,7 @@
 using namespace std;
 
 #define si(n) scanf("%d",&n)
+#define ll long long
 #define MAX 100005  //=================> careful here
 
 // *************Manual by isti **********
