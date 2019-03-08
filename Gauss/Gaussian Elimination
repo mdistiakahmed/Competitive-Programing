@@ -48,6 +48,7 @@ int gauss(double a[MAX][MAX], double ans[MAX], int n, int m)
 /*
 
 // calculates gauss modulo a prime
+//========> careful : use positive value, like instead -1 % k, use k-1
 long long Det;
 long long bigmod(long long x, long long pow, long long mod)
 {
