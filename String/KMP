@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define MAX 1000006
+
+int pi[MAX];
+string header,text;
+
+void pi_fun(string str)
+{
+    for(int i=1;i<str.size();i++){
+        int j=pi[i-1];
+        while(j>0 && str[i] != str[j])
+            j=pi[j-1];
+        if(str[i]==str[j])
+            j++;
+        pi[i]=j;
+    }
+}
+
+bool match()
+{
+    int j=0;
+    for(int i=0;i<header.size();i++){
+        while(j>0 && header[i] != text[j])
+            j=pi[j-1];
+        if(header[i]==text[j])
+            j++;
+        if(j==text.size())
+            return true;
+    }
+    return false;
+}
+
+int main()
+{
+    freopen("input.txt","r",stdin);
+    int i,j;
+    cin>>header>>text;
+    pi_fun(text);
+    cout<<match()<<endl;
+
+    return 0;
+
+}
