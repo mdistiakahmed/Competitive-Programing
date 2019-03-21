@@ -1,0 +1,82 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define si(n) scanf("%d",&n)
+#define MAX 100005
+#define INF 100000
+#define ll long long
+
+ll tree[4*MAX],prop[4*MAX];
+
+
+void push_down(int node,int tl,int tr)
+{
+    if(tl!=tr){
+        prop[node*2]+=prop[node];
+        prop[node*2+1]+=prop[node];
+    }
+
+    tree[node]+= (tr-tl+1)*prop[node];
+
+    prop[node]=0;
+}
+
+void update(int node,int tl,int tr,int l,int r,int val)
+{
+    if(prop[node])push_down(node,tl,tr);
+
+    if(tl>r || tr<l)return;
+    if(tl>=l && tr<=r){
+        prop[node]+=val;
+        push_down(node,tl,tr);
+        return ;
+    }
+
+    int mid=(tl+tr)/2;
+    update(node*2,tl,mid,l,r,val);
+    update(node*2+1,mid+1,tr,l,r,val);
+    tree[node]=(tree[node*2]+tree[node*2+1]);
+    return ;
+}
+
+ll quary(int node,int tl,int tr,int l,int r)
+{
+    if(prop[node])push_down(node,tl,tr);
+
+    if(tl>r || tr<l)return 0;
+
+    if(tl>=l && tr<=r){
+        return tree[node];
+    }
+    int mid=(tl+tr)/2;
+    return (quary(node*2,tl,mid,l,r)+
+        quary(node*2+1,mid+1,tr,l,r));
+}
+
+int main()
+{
+//   freopen("input.txt","r",stdin);
+//   freopen("output.txt","w",stdout);
+    int i,j,n,q,t;
+    si(t);
+    for(int cs=1;cs<=t;cs++){
+        si(n);si(q);
+        printf("Case %d:\n",cs);
+        memset(prop,0,sizeof(prop));
+        memset(tree,0,sizeof(tree));
+
+        while(q--){
+            int type,x,y,val;
+            si(type);si(x);si(y);
+            x++;y++;
+            if(type==1){
+                printf("%lld\n",quary(1,1,n,x,y));
+            }
+            else{
+                si(val);
+                update(1,1,n,x,y,val);
+            }
+        }
+    }
+
+}
