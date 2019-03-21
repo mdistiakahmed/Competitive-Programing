@@ -1,0 +1,81 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define si(n) scanf("%d",&n)
+#define MAX 100005
+#define INF 1000000009
+
+int arr[MAX],tree[4*MAX];
+
+void build(int node,int l,int r)
+{
+    if(l==r)
+        tree[node]=arr[l];
+    else{
+        int mid=(l+r)/2;
+        build(node*2,l,mid);
+        build(node*2+1,mid+1,r);
+        tree[node]=(tree[node*2]+tree[node*2+1]);
+    }
+}
+
+int sum(int node,int tl,int tr,int l,int r)
+{
+    if(l>r)
+        return 0;
+    if(l==tl && r==tr)
+        return tree[node];
+    int mid=(tl+tr)/2;
+
+    return (sum(node*2,tl,mid,l,min(r,mid))
+        + sum(node*2+1,mid+1,tr,max(l,mid+1),r));
+}
+
+void update(int node,int l,int r,int pos,int val)
+{
+    if(l==r)
+        tree[node]+=val;
+    else{
+        int mid=(l+r)/2;
+        if(pos<=mid)
+            update(node*2,l,mid,pos,val);
+        else
+            update(node*2+1,mid+1,r,pos,val);
+        tree[node]=(tree[node*2]+tree[node*2+1]);
+    }
+}
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    int i,j,t,n,q;
+    si(t);
+    for(int cs=1;cs<=t;cs++){
+        si(n);si(q);
+        for(i=1;i<=n;i++)si(arr[i]);
+        build(1,1,n);
+        printf("Case %d:\n",cs);
+        while(q--){
+            int type;
+            si(type);
+            if(type==1){
+                si(i);
+                i++;
+                int val=sum(1,1,n,i,i);
+                printf("%d\n",val);
+                update(1,1,n,i,-val);
+            }
+            else if(type==2){
+                si(i);si(j);
+                i++;
+                update(1,1,n,i,j);
+            }
+            else{
+                si(i);si(j);
+                i++;j++;
+                printf("%d\n",sum(1,1,n,i,j));
+            }
+        }
+    }
+    return 0;
+}
