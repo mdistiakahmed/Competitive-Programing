@@ -1,0 +1,54 @@
+int a[MAX],b[MAX],mx[MAX][20],mn[MAX][20],n;
+//preprocess O(nlogn) , quary O(1) ; no update can be handaled
+//from topcoder, array is 1-indexed
+void RMQ()
+{
+    int i,j;
+    for(i=1;i<=n;i++)mx[i][0]=i;
+    for(i=1;i<=n;i++)mn[i][0]=i;
+
+    for(j=1;(1<<j)<=n;j++){
+
+        for(i=1;i+(1<<j)-1<=n;i++){
+            if(a[mx[i][j-1]]>a[mx[i+(1<<(j-1))][j-1]])
+                mx[i][j]=mx[i][j-1];
+            else mx[i][j]=mx[i+(1<<(j-1))][j-1];
+        }
+
+        for(i=1;i+(1<<j)-1<=n;i++){
+            if(b[mn[i][j-1]]<b[mn[i+(1<<(j-1))][j-1]])
+                mn[i][j]=mn[i][j-1];
+            else mn[i][j]=mn[i+(1<<(j-1))][j-1];
+        }
+
+    }
+}
+
+
+int mylog[3*MAX];
+
+void calclog()
+{
+    int x=1,i=1,pw=0;
+    while(x<MAX){
+        x*=2;
+        for(;i<x;i++){
+            mylog[i]=pw;
+        }
+        pw++;
+        mylog[i]=pw;
+        i++;
+    }
+}
+
+int get_mx(int i,int j)
+{
+    int k=mylog[j-i+1];
+    return max(a[mx[i][k]],a[mx[j-(1<<k)+1][k]]);
+}
+
+int get_mn(int i,int j)
+{
+    int k=mylog[j-i+1];
+    return min(b[mn[i][k]],b[mn[j-(1<<k)+1][k]]);
+}
