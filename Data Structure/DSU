@@ -1,0 +1,67 @@
+//http://codeforces.com/problemset/problem/437/D
+#include<bits/stdc++.h>
+using namespace std;
+ 
+#define si(n) scanf("%d",&n)
+#define f first
+#define s second
+#define mp(a,b) make_pair(a,b)
+#define MAX 100005
+ 
+int n,m,par[MAX];
+ 
+int root(int v){return par[v]<0?v:(par[v]=root(par[v]));}
+ 
+void union_set(int u,int v)
+{
+    if((u=root(u))==(v=root(v)))return ;
+    if(par[u]>par[v])swap(u,v);
+    par[u]+=par[v];
+    par[v]=u;
+}
+ 
+ 
+vector<int>gr[MAX];
+int vis[MAX];
+ 
+int main()
+{
+    int i,j;
+    si(n);si(m);
+    memset(par,-1,sizeof(par));
+    vector<pair<int,int> >all;
+ 
+    for(i=0;i<n;i++){
+        int w;
+        si(w);
+        all.push_back(mp(w,i));
+    }
+    sort(all.begin(),all.end());
+ 
+    for(i=0;i<m;i++){
+        int u,v;
+        si(u);si(v);u--;v--;
+        gr[u].push_back(v);
+        gr[v].push_back(u);
+    }
+    long long ans=0;
+ 
+    for(i=all.size()-1;i>=0;i--){
+        long long t=0;
+        int nd=all[i].s,val=all[i].f;
+        for(j=0;j<gr[nd].size();j++){
+            int to=gr[nd][j];
+            if(!vis[to])continue;
+            int now=root(nd);
+            to=root(to);
+            if(now==to)continue;
+            t+=(long long)(-par[now])*(-par[to]);
+            union_set(now,to);
+        }
+        t*=val;
+        ans+=t;
+        vis[nd]=1;
+    }
+    ans*=2;
+    printf("%.6f\n",(double)ans/((long long)n*(n-1)));
+}
