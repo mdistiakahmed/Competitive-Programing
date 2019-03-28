@@ -1,0 +1,92 @@
+/*
+LCA code from PrinceOfparsia's blog :Codeforces
+http://codeforces.com/blog/entry/16221
+*/
+#include<bits/stdc++.h>
+using namespace std;
+ 
+#define si(n) scanf("%d",&n)
+#define MAX 100005
+#define MAXLOG 20
+ 
+int par[MAX][MAXLOG];
+int h[MAX];
+vector<int>graph[MAX];
+ 
+void dfs(int now,int from=-1){
+    par[now][0]=from;
+    if(from+1){
+        h[now]=h[from]+1;
+    }
+    for(int i=1;i<MAXLOG;i++){
+        if(par[now][i-1]+1){
+            par[now][i]=par[par[now][i-1]][i-1];
+        }
+    }
+    for(auto to : graph[now]){
+        if(to != from){
+            dfs(to,now);
+        }
+    }
+}
+ 
+//find jth parrent of x
+int parent(int x,int j){
+    for (int i=0; i<MAXLOG; i++)
+         if (j&(1<<i)) x=par[x][i];
+    return x;
+}
+ 
+int LCA(int v,int u){
+    if(h[v]<h[u])
+        swap(v,u);
+    for(int i=MAXLOG-1;i>=0;i--){
+        if(par[v][i]+1 && h[par[v][i]]>=h[u]){
+            v=par[v][i];
+        }
+    }
+    //now h[u]=h[v]
+    if(u==v)
+        return v;
+    for(int i=MAXLOG-1;i>=0;i--){
+        if(par[v][i]-par[u][i]){
+            v=par[v][i];
+            u=par[u][i];
+        }
+    }
+    return par[v][0];
+}
+ 
+//number of edges of path x->y
+int dist(int x,int y)
+{
+    return h[x]+h[y]-2*h[LCA(x,y)];
+}
+//number of common edges of two paths
+// a->c & b->c
+int common_edges(int a,int b,int c)
+{
+    return (dist(a,c)+dist(b,c)-dist(a,b))/2;
+}
+ 
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    int n,m,q,i,j;
+    si(n);si(q);
+    for(i=1;i<=n-1;i++){
+        int u,v;
+        si(u);si(v);
+        graph[u].push_back(v);
+        graph[v].push_back(u);
+    }
+    memset(par,-1,sizeof(par));
+    dfs(1);
+    while(q--){
+        int u,v,a;
+        si(u);si(v);
+        int ans=LCA(u,v);
+        cout<<ans<<endl;
+    }
+    return 0;
+}
