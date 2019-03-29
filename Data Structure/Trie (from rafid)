@@ -1,42 +1,87 @@
-// works as a set
-struct Trie {
-	static const int M_NODE = 100000+7;		// max num of nodes, keep as large as possible
-	static const int M_KIDS = 26;	// Alphabets
-	int kids[M_NODE][M_KIDS];	// next kid, initially negative
-	bool ended[M_NODE];		// true if a string ends at a node
-	static const int root = 0;
-	int size;
+#include<bits/stdc++.h>
+using namespace std;
 
-	void init() {
-		memset(kids[root], -1, sizeof kids[root]);
-		ended[root] = false;
-		size = 1;
-	}
+char mp[200];
 
-	int ctoi(char c) { return c-'a'; }
+const int M_NODE = 1000005;     // max num of nodes, keep as large as possible
+const int M_KIDS = 4;   // Alphabets
+int kids[M_NODE][M_KIDS];   // next kid, initially negative
+bool ended[M_NODE];     // true if a string ends at a node
+const int root = 0;
+int nxt;
 
-	void insert(string s) {
-		int cur = root;
-		for(int i=0; i<(int) s.size(); ++i) {
-			int c = ctoi(s[i]);
-			if(kids[cur][c] == -1) {
-				memset(kids[size], -1, sizeof kids[size]);
-				ended[size] = false;
-				kids[cur][c] = size++;
-			}
-			cur = kids[cur][c];
-		}
-		ended[cur] = true;
-	}
+int cnt[M_NODE][M_KIDS];
 
-	// true if s exists in trie
-	bool query(string s) {
-		int cur = root;
-		for(int i=0; i<(int) s.size(); ++i) {
-			int c = ctoi(s[i]);
-			if(kids[cur][c] == -1) return false;
-			cur = kids[cur][c];
-		}
-		return ended[cur];
-	}
-} trie;
+void init() {
+    mp['A']='A',mp['G']='B',mp['C']='C',mp['T']='D';
+    memset(kids[root], -1, sizeof kids[root]);
+    memset(cnt[root], 0, sizeof cnt[root]);
+    ended[root] = false;
+    nxt = 1;
+}
+
+int ctoi(char c) { return mp[c]-'A'; }
+
+void add(string s) {
+    int cur = root;
+    for(int i=0; i<(int) s.size(); ++i) {
+        int c = ctoi(s[i]);
+        if(kids[cur][c] == -1) {
+            memset(kids[nxt], -1, sizeof kids[nxt]);
+            memset(cnt[nxt], 0, sizeof cnt[nxt]);
+            ended[nxt] = false;
+            kids[cur][c] = nxt++;
+        }
+        cnt[cur][c]++;
+        cur = kids[cur][c];
+    }
+    ended[cur] = true;
+}
+
+// true if s exists in trie
+bool query(string s) {
+    int cur = root;
+    for(int i=0; i<(int) s.size(); ++i) {
+        int c = ctoi(s[i]);
+        if(kids[cur][c] == -1) return false;
+        cur = kids[cur][c];
+    }
+    return ended[cur];
+}
+
+int ans=0;
+
+void dfs(int curr,int depth)
+{
+    for(int i=0;i<M_KIDS;i++){
+        if(kids[curr][i]!= -1){
+            ans=max(ans,(depth+1)*cnt[curr][i]);
+            dfs(kids[curr][i],depth+1);
+        }
+    }
+
+}
+
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+
+    int i,j,t,n;
+    scanf("%d",&t);
+    for(int cs=1;cs<=t;cs++){
+        init();
+        scanf("%d",&n);
+        ans=0;
+        while(n--){
+            string str;
+            cin>>str;
+            ans=max(ans,(int)str.size());
+            add(str);
+        }
+        dfs(0,0);
+        printf("Case %d: %d\n",cs,ans);
+    }
+
+}
+
