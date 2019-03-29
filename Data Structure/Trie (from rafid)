@@ -1,0 +1,42 @@
+// works as a set
+struct Trie {
+	static const int M_NODE = 100000+7;		// max num of nodes, keep as large as possible
+	static const int M_KIDS = 26;	// Alphabets
+	int kids[M_NODE][M_KIDS];	// next kid, initially negative
+	bool ended[M_NODE];		// true if a string ends at a node
+	static const int root = 0;
+	int size;
+
+	void init() {
+		memset(kids[root], -1, sizeof kids[root]);
+		ended[root] = false;
+		size = 1;
+	}
+
+	int ctoi(char c) { return c-'a'; }
+
+	void insert(string s) {
+		int cur = root;
+		for(int i=0; i<(int) s.size(); ++i) {
+			int c = ctoi(s[i]);
+			if(kids[cur][c] == -1) {
+				memset(kids[size], -1, sizeof kids[size]);
+				ended[size] = false;
+				kids[cur][c] = size++;
+			}
+			cur = kids[cur][c];
+		}
+		ended[cur] = true;
+	}
+
+	// true if s exists in trie
+	bool query(string s) {
+		int cur = root;
+		for(int i=0; i<(int) s.size(); ++i) {
+			int c = ctoi(s[i]);
+			if(kids[cur][c] == -1) return false;
+			cur = kids[cur][c];
+		}
+		return ended[cur];
+	}
+} trie;
