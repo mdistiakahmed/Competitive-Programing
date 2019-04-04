@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define MAX 1003
+
+bool pr[MAX];
+vector<int>prime;
+
+void seive()
+{
+    memset(pr,true,sizeof(pr));
+    pr[1]=pr[0]=false;
+    for(int i=2;i<MAX;i++){
+        if(!pr[i])
+            continue;
+        prime.push_back(i);
+        for(int j=i*2;j<MAX;j+=i)
+            pr[j]=false;
+    }
+
+}
+
+int main()
+{
+    int i,j;
+    seive();
+    cout<<prime.size()<<endl;
+}
