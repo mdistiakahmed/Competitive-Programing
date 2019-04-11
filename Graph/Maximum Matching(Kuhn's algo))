@@ -1,0 +1,69 @@
+//from noor
+// careful : graph should be such in form that only edge from lft side to rht side. 
+// like all edges from lft--> rht should be in graph, but not rht-->lft edges. 
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define si(a) scanf("%d",&a)
+#define f first
+#define s second
+#define mp(a,b) make_pair(a,b)
+#define INF 2000000000
+#define MAX 1003
+
+vector<int> graph[MAX];
+int vis[MAX],link[MAX];
+
+bool dfs(int now)
+{
+    int i;
+    for(i=0;i<graph[now].size();i++){
+        int to=graph[now][i];
+        if(vis[to])
+            continue;
+        vis[to]=1;
+        if(link[to]==-1 || dfs(link[to])){
+            link[to]=now;
+            return true;
+        }
+    }
+    return false;
+}
+
+int matching(int n)
+{
+    int i,ret=0;
+    memset(link,-1,sizeof(link));
+    for(i=0;i<n;i++){
+        memset(vis,0,sizeof(vis));
+        if(dfs(i))
+            ret++;
+    }
+    return ret;
+}
+
+void reset()
+{
+    for(int i=0;i<MAX;i++)
+        graph[i].clear();
+}
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    int n,m,i,j,t;
+    si(t);
+    for(int cs=1;cs<=t;cs++){
+        si(n);si(m);
+        reset();
+        for(i=0;i<m;i++){
+            int u,v;
+            si(u);si(v);
+            u--;v--;
+            graph[u].push_back(v);
+        }
+        int ans=matching(n);
+        printf("Case %d: %d\n",cs,ans);
+    }
+}
