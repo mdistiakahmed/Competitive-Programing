@@ -1,0 +1,41 @@
+// form prince_of_partia blog
+//https://codeforces.com/blog/entry/15729
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int x[100003][10],nxt=0;
+
+void add(string & str)
+{
+    int curr=0;
+    for(int i=0;i<str.size();i++){
+        int to=str[i]-'0';
+        if(x[curr][to]==-1){
+            memset(x[nxt+1],-1,sizeof(x[nxt+1]));
+
+            x[curr][to]= ++nxt;
+        }
+        curr=x[curr][to];
+        cnt[curr]++;
+    }
+}
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    int i,j,t,n;
+    string str;
+    cin>>t;
+    while(t--){
+        cin>>n;
+        memset(x[0],-1,sizeof(x[0]));// don't need to memset whole array for each test
+        nxt=0;
+
+        bool ans=true;
+        while(n--){
+            cin>>str;
+            add(str);
+        }
+    }
+}
