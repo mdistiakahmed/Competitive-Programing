@@ -1,87 +1,39 @@
+//from prince_of_partia : https://codeforces.com/blog/entry/15729
 #include<bits/stdc++.h>
 using namespace std;
 
-char mp[200];
+int x[100003][10],nxt=0;
 
-const int M_NODE = 1000005;     // max num of nodes, keep as large as possible
-const int M_KIDS = 4;   // Alphabets
-int kids[M_NODE][M_KIDS];   // next kid, initially negative
-bool ended[M_NODE];     // true if a string ends at a node
-const int root = 0;
-int nxt;
-
-int cnt[M_NODE][M_KIDS];
-
-void init() {
-    mp['A']='A',mp['G']='B',mp['C']='C',mp['T']='D';
-    memset(kids[root], -1, sizeof kids[root]);
-    memset(cnt[root], 0, sizeof cnt[root]);
-    ended[root] = false;
-    nxt = 1;
-}
-
-int ctoi(char c) { return mp[c]-'A'; }
-
-void add(string s) {
-    int cur = root;
-    for(int i=0; i<(int) s.size(); ++i) {
-        int c = ctoi(s[i]);
-        if(kids[cur][c] == -1) {
-            memset(kids[nxt], -1, sizeof kids[nxt]);
-            memset(cnt[nxt], 0, sizeof cnt[nxt]);
-            ended[nxt] = false;
-            kids[cur][c] = nxt++;
-        }
-        cnt[cur][c]++;
-        cur = kids[cur][c];
-    }
-    ended[cur] = true;
-}
-
-// true if s exists in trie
-bool query(string s) {
-    int cur = root;
-    for(int i=0; i<(int) s.size(); ++i) {
-        int c = ctoi(s[i]);
-        if(kids[cur][c] == -1) return false;
-        cur = kids[cur][c];
-    }
-    return ended[cur];
-}
-
-int ans=0;
-
-void dfs(int curr,int depth)
+void add(string & str)
 {
-    for(int i=0;i<M_KIDS;i++){
-        if(kids[curr][i]!= -1){
-            ans=max(ans,(depth+1)*cnt[curr][i]);
-            dfs(kids[curr][i],depth+1);
+    int curr=0;
+    for(int i=0;i<str.size();i++){
+        int to=str[i]-'0';
+        if(x[curr][to]==-1){
+            memset(x[nxt+1],-1,sizeof(x[nxt+1]));
+
+            x[curr][to]= ++nxt;
         }
+        curr=x[curr][to];
+        cnt[curr]++;
     }
-
 }
-
 
 int main()
 {
     //freopen("input.txt","r",stdin);
-
     int i,j,t,n;
-    scanf("%d",&t);
-    for(int cs=1;cs<=t;cs++){
-        init();
-        scanf("%d",&n);
-        ans=0;
+    string str;
+    cin>>t;
+    while(t--){
+        cin>>n;
+        memset(x[0],-1,sizeof(x[0]));// don't need to memset whole array for each test
+        nxt=0;
+
+        bool ans=true;
         while(n--){
-            string str;
             cin>>str;
-            ans=max(ans,(int)str.size());
             add(str);
         }
-        dfs(0,0);
-        printf("Case %d: %d\n",cs,ans);
     }
-
 }
-
