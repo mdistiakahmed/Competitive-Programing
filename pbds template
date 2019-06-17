@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> // Common file
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+
+typedef tree<
+int,
+null_type,
+less<int>,
+rb_tree_tag,
+tree_order_statistics_node_update>
+ordered_set;
+
+ordered_set X;
+
+//**************** manual ****************
+//*X.find_by_order(k) = returns an iterator to the k-th largest element (counting from zero),
+//X.order_of_key(-5) =the number of items in a set that are strictly smaller than our item
+
+
+//Note on using less_equal as comparison function to use it as a multiset:
+//
+//    _GLIBCXX_DEBUG must not be defined, otherwise some internal check will fail.
+//    find will always return end.
+//    lower_bound works like upper_bound in normal set (to return the first element > it)
+//    upper_bound works like lower_bound in normal set (to return the first element >= it)
+//    find_by_order and order_of_key works properly (unlike the 2 functions above).
+
+//****************end of manual **********
+
+#define si(n) scanf("%d",&n)
+#define ll long long
+#define f first
+#define s second
+#define MAX 300005
+
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    int i,j;
+
+
+}
