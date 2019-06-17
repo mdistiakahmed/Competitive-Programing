@@ -3,6 +3,8 @@ using namespace std;
 
 #define si(n) scanf("%d",&n)
 #define ll long long
+#define f first
+#define s second
 #define MAX 200005
 
 int main()
